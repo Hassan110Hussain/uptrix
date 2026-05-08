@@ -1,15 +1,15 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
 import { Button } from "@/components/ui/Button";
-import { MonitorFormData, Monitor } from "@/types";
-import { validateUrl } from "@/lib/utils";
+import { MonitorData, Monitor } from "@/types";
+import { isValidUrl } from "@/lib/utils";
 
 interface MonitorFormProps {
   initialData?: Partial<Monitor>;
-  onSubmit: (data: MonitorFormData) => Promise<void>;
+  onSubmit: (data: MonitorData) => Promise<void>;
   onCancel: () => void;
   isLoading: boolean;
   submitLabel?: string;
@@ -43,7 +43,7 @@ export function MonitorForm({
   isLoading,
   submitLabel = "Save Monitor",
 }: MonitorFormProps) {
-  const [form, setForm] = useState<MonitorFormData>({
+  const [form, setForm] = useState<MonitorData>({
     name: initialData?.name || "",
     url: initialData?.url || "",
     method: initialData?.method || "GET",
@@ -54,28 +54,28 @@ export function MonitorForm({
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   function validate(): boolean {
-    const newErrors: Record<string, string> = {};
-    if (!form.name.trim()) newErrors.name = "Monitor name is required";
-    if (!form.url.trim()) newErrors.url = "URL is required";
-    else if (!validateUrl(form.url)) newErrors.url = "Enter a valid URL (include https://)";
+    const errors: Record<string, string> = {};
+    if (!form.name.trim()) errors.name = "Monitor name is required";
+    if (!form.url.trim()) errors.url = "URL is required";
+    else if (!isValidUrl(form.url)) errors.url = "Enter a valid URL (include https://)";
     if (!form.expectedStatusCode || form.expectedStatusCode < 100 || form.expectedStatusCode > 599)
-      newErrors.expectedStatusCode = "Enter a valid HTTP status code (100-599)";
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+      errors.expectedStatusCode = "Enter a valid HTTP status code (100-599)";
+    setErrors(errors);
+    return Object.keys(errors).length === 0;
   }
 
-  async function handleSubmit(e: React.FormEvent) {
+  async function onFormSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!validate()) return;
     await onSubmit(form);
   }
 
   return (
-    <form onSubmit={handleSubmit} noValidate className="space-y-4">
+    <form onSubmit={onFormSubmit} noValidate className="space-y-4">
       <Input
         label="Monitor Name"
         type="text"
-        placeholder="e.g. Production API"
+        placeholder="API Health Check"
         value={form.name}
         onChange={(e) => setForm({ ...form, name: e.target.value })}
         error={errors.name}
@@ -85,7 +85,7 @@ export function MonitorForm({
       <Input
         label="URL"
         type="url"
-        placeholder="https://api.example.com/health"
+        placeholder="https://myapi.com/health"
         value={form.url}
         onChange={(e) => setForm({ ...form, url: e.target.value })}
         error={errors.url}

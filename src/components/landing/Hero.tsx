@@ -1,6 +1,4 @@
-import React from "react";
 import Link from "next/link";
-import Image from "next/image";
 
 export function Hero() {
   return (
@@ -53,7 +51,7 @@ export function Hero() {
                 href="#how-it-works"
                 className="inline-flex items-center bg-transparent border border-[#2a4035] hover:border-[#00c896]/40 text-white hover:text-white font-medium px-5 py-2.5 rounded-[5px] text-[13px] transition-colors duration-150"
               >
-                View Demo
+                Learn More
               </Link>
             </div>
           </div>
@@ -74,7 +72,7 @@ export function Hero() {
             <div className="relative rounded-lg overflow-hidden shadow-2xl">
               <img
                 src="/assets/ImageOverlay.svg"
-                alt="Uptrix Dashboard - Real-time monitoring interface showing uptime statistics, response times, and system health metrics"
+                alt="Uptrix Dashboard"
                 className="w-full h-auto rounded-lg"
                 style={{
                   border: "1px solid rgba(0,180,200,0.14)",

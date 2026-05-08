@@ -44,42 +44,41 @@ export interface MonitorFilters {
 }
 
 // API Response Types
-export interface ApiResponse<T = unknown> {
+export interface ApiResponse<T = any> {
   success: boolean;
   message: string;
   data: T;
 }
 
-// Form Types
-export interface LoginFormData {
+export interface LoginData {
   email: string;
   password: string;
 }
 
-export interface RegisterFormData {
+export interface RegisterData {
   name: string;
   email: string;
   password: string;
   confirmPassword: string;
 }
 
-export interface OtpFormData {
+export interface OtpData {
   email: string;
   otp: string;
 }
 
-export interface ForgotPasswordFormData {
+export interface ForgotPasswordData {
   email: string;
 }
 
-export interface ResetPasswordFormData {
+export interface ResetPasswordData {
   email: string;
   otp: string;
   newPassword: string;
   confirmPassword: string;
 }
 
-export interface MonitorFormData {
+export interface MonitorData {
   name: string;
   url: string;
   method: "GET" | "POST";

@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Mail, ArrowRight, ArrowLeft, Key } from "lucide-react";
 import { authApi } from "@/lib/api";
-import { validateEmail } from "@/lib/utils";
+import { isValidEmail } from "@/lib/utils";
 
 export default function ForgotPasswordPage() {
   const router = useRouter();
@@ -16,7 +16,7 @@ export default function ForgotPasswordPage() {
 
   function validate(): boolean {
     if (!email) { setError("Email is required"); return false; }
-    if (!validateEmail(email)) { setError("Enter a valid email"); return false; }
+    if (!isValidEmail(email)) { setError("Enter a valid email"); return false; }
     setError("");
     return true;
   }

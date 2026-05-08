@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Mail, ArrowRight, ArrowLeft, RotateCcw, Eye, EyeOff, Lock, Shield, CheckCircle } from "lucide-react";
 import { authApi } from "@/lib/api";
-import { validatePassword } from "@/lib/utils";
+import { checkPassword } from "@/lib/utils";
 
 function ResetPasswordForm() {
   const router = useRouter();
@@ -31,7 +31,7 @@ function ResetPasswordForm() {
     }
   }, []);
 
-  const handleOtpChange = (index: number, value: string) => {
+  const updateOtp = (index: number, value: string) => {
     // Only allow numeric characters and filter out any non-numeric input
     const numericValue = value.replace(/[^0-9]/g, '');
     
@@ -48,7 +48,7 @@ function ResetPasswordForm() {
     }
   };
 
-  const handleKeyDown = (index: number, e: React.KeyboardEvent) => {
+  const onKeyDown = (index: number, e: React.KeyboardEvent) => {
     // Prevent non-numeric keys except backspace, delete, arrow keys, and tab
     const allowedKeys = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'];
     const isNumeric = /^[0-9]$/.test(e.key);
@@ -96,7 +96,7 @@ function ResetPasswordForm() {
       newErrors.otp = "Please enter the complete 6-digit code";
     }
     
-    const pwdError = validatePassword(newPassword);
+    const pwdError = checkPassword(newPassword);
     if (!newPassword) newErrors.newPassword = "Password is required";
     else if (pwdError) newErrors.newPassword = pwdError;
     
@@ -210,8 +210,8 @@ function ResetPasswordForm() {
                       pattern="[0-9]*"
                       maxLength={1}
                       value={digit}
-                      onChange={(e) => handleOtpChange(index, e.target.value)}
-                      onKeyDown={(e) => handleKeyDown(index, e)}
+                      onChange={(e) => updateOtp(index, e.target.value)}
+                      onKeyDown={(e) => onKeyDown(index, e)}
                       onPaste={handlePaste}
                       onInput={(e) => {
                         // Additional safeguard to prevent non-numeric input

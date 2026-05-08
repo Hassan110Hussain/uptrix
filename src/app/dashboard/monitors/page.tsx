@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Plus, Search, AlertCircle, Monitor as MonitorIcon, SlidersHorizontal } from "lucide-react";
 import { MonitorCard } from "@/components/monitors/MonitorCard";
 import { MonitorForm } from "@/components/monitors/MonitorForm";
@@ -13,7 +13,7 @@ import { Spinner } from "@/components/ui/Spinner";
 import { ToastContainer } from "@/components/ui/Toast";
 import { useAuth } from "@/context/AuthContext";
 import { monitorApi } from "@/lib/api";
-import { Monitor, MonitorFormData, ApiResponse, MonitorListResponse } from "@/types";
+import { Monitor, MonitorData, ApiResponse, MonitorListResponse } from "@/types";
 import { useToast } from "@/hooks/useToast";
 
 const METHOD_FILTER_OPTIONS = [
@@ -96,7 +96,7 @@ export default function MonitorsPage() {
     setOffset(1);
   }, [search, methodFilter, statusFilter]);
 
-  async function handleCreate(data: MonitorFormData) {
+  async function create(data: MonitorData) {
     if (!token) return;
     setIsSubmitting(true);
     try {
@@ -111,7 +111,7 @@ export default function MonitorsPage() {
     }
   }
 
-  async function handleUpdate(data: MonitorFormData) {
+  async function update(data: MonitorData) {
     if (!token || !editMonitor) return;
     setIsSubmitting(true);
     try {
@@ -126,7 +126,7 @@ export default function MonitorsPage() {
     }
   }
 
-  async function handleDelete() {
+  async function remove() {
     if (!token || !deleteMonitor) return;
     setIsDeleting(true);
     try {
@@ -141,7 +141,7 @@ export default function MonitorsPage() {
     }
   }
 
-  async function handleToggle(monitor: Monitor) {
+  async function toggle(monitor: Monitor) {
     if (!token) return;
     try {
       await monitorApi.toggleMonitor(monitor._id, token);
@@ -168,7 +168,7 @@ export default function MonitorsPage() {
         size="lg"
       >
         <MonitorForm
-          onSubmit={handleCreate}
+          onSubmit={create}
           onCancel={() => setIsCreateOpen(false)}
           isLoading={isSubmitting}
           submitLabel="Create Monitor"
@@ -184,7 +184,7 @@ export default function MonitorsPage() {
       >
         <MonitorForm
           initialData={editMonitor || undefined}
-          onSubmit={handleUpdate}
+          onSubmit={update}
           onCancel={() => setEditMonitor(null)}
           isLoading={isSubmitting}
           submitLabel="Update Monitor"
@@ -196,7 +196,7 @@ export default function MonitorsPage() {
         monitor={deleteMonitor}
         isOpen={!!deleteMonitor}
         onClose={() => setDeleteMonitor(null)}
-        onConfirm={handleDelete}
+        onConfirm={remove}
         isLoading={isDeleting}
       />
 
@@ -310,7 +310,7 @@ export default function MonitorsPage() {
                 monitor={monitor}
                 onEdit={setEditMonitor}
                 onDelete={setDeleteMonitor}
-                onToggle={handleToggle}
+                onToggle={toggle}
               />
             ))}
           </div>

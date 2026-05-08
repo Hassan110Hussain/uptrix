@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff, User, Mail, Lock, ArrowRight } from "lucide-react";
 import { authApi } from "@/lib/api";
-import { validateEmail, validatePassword } from "@/lib/utils";
+import { isValidEmail, checkPassword } from "@/lib/utils";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -21,18 +21,18 @@ export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
 
   function validate(): boolean {
-    const newErrors: Record<string, string> = {};
-    if (!form.name.trim()) newErrors.name = "Name is required";
-    if (!form.email) newErrors.email = "Email is required";
-    else if (!validateEmail(form.email)) newErrors.email = "Enter a valid email";
-    const pwdError = validatePassword(form.password);
-    if (!form.password) newErrors.password = "Password is required";
-    else if (pwdError) newErrors.password = pwdError;
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    const errors: Record<string, string> = {};
+    if (!form.name.trim()) errors.name = "Name is required";
+    if (!form.email) errors.email = "Email is required";
+    else if (!isValidEmail(form.email)) errors.email = "Enter a valid email";
+    const pwdError = checkPassword(form.password);
+    if (!form.password) errors.password = "Password is required";
+    else if (pwdError) errors.password = pwdError;
+    setErrors(errors);
+    return Object.keys(errors).length === 0;
   }
 
-  async function handleSubmit(e: React.FormEvent) {
+  async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setApiError("");
     if (!validate()) return;
@@ -86,7 +86,7 @@ export default function RegisterPage() {
               </div>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={onSubmit} className="space-y-6">
               {/* Full Name */}
               <div>
                 <label className="block text-[#00c896] text-xs font-semibold uppercase tracking-wider mb-2">
@@ -96,7 +96,7 @@ export default function RegisterPage() {
                   <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#00c896] w-4 h-4" />
                   <input
                     type="text"
-                    placeholder="John Doe"
+                    placeholder="Alex Johnson"
                     value={form.name}
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
                     className="w-full bg-transparent border border-[#1a3a24] rounded-lg pl-10 pr-4 py-3 text-white placeholder-gray-500 focus:border-[#00c896] focus:outline-none transition-colors"
@@ -115,7 +115,7 @@ export default function RegisterPage() {
                   <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#00c896] w-4 h-4" />
                   <input
                     type="email"
-                    placeholder="name@example.com"
+                    placeholder="alex@company.com"
                     value={form.email}
                     onChange={(e) => setForm({ ...form, email: e.target.value })}
                     className="w-full bg-transparent border border-[#1a3a24] rounded-lg pl-10 pr-4 py-3 text-white placeholder-gray-500 focus:border-[#00c896] focus:outline-none transition-colors"

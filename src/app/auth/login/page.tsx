@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Eye, EyeOff, Mail, Lock, ArrowRight } from "lucide-react";
+import { Eye, EyeOff, ArrowRight } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { authApi } from "@/lib/api";
-import { validateEmail } from "@/lib/utils";
+import { isValidEmail } from "@/lib/utils";
 import { ApiResponse, User } from "@/types";
 
 interface LoginData {
@@ -28,15 +28,15 @@ export default function LoginPage() {
   const [keepLoggedIn, setKeepLoggedIn] = useState(false);
 
   function validate(): boolean {
-    const newErrors: Record<string, string> = {};
-    if (!form.email) newErrors.email = "Email is required";
-    else if (!validateEmail(form.email)) newErrors.email = "Enter a valid email";
-    if (!form.password) newErrors.password = "Password is required";
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    const errors: Record<string, string> = {};
+    if (!form.email) errors.email = "Email is required";
+    else if (!isValidEmail(form.email)) errors.email = "Enter a valid email";
+    if (!form.password) errors.password = "Password is required";
+    setErrors(errors);
+    return Object.keys(errors).length === 0;
   }
 
-  async function handleSubmit(e: React.FormEvent) {
+  async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setApiError("");
     if (!validate()) return;
@@ -91,7 +91,7 @@ export default function LoginPage() {
               </div>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={onSubmit} className="space-y-6">
               {/* Form Container with Border */}
               <div className="border border-[#1a3a24] rounded-2xl p-6" style={{ backgroundColor: '#101d24' }}>
                 {/* Email */}
@@ -101,7 +101,7 @@ export default function LoginPage() {
                   </label>
                   <input
                     type="email"
-                    placeholder="name@company.com"
+                    placeholder="john@company.com"
                     value={form.email}
                     onChange={(e) => setForm({ ...form, email: e.target.value })}
                     className="w-full bg-[#0a1a0f] border border-[#1a3a24] rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:border-[#00c896] focus:outline-none transition-colors"

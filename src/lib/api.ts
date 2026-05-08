@@ -30,23 +30,17 @@ async function request<T>(
   }
 
   const url = `${BASE_URL}${endpoint}`;
-  console.log('Making API request to:', url);
-  console.log('Request config:', config);
 
   try {
     const response = await fetch(url, config);
-    console.log('Response status:', response.status);
-    
     const data = await response.json();
-    console.log('Response data:', data);
 
     if (!response.ok) {
-      throw new Error(data.message || "Something went wrong");
+      throw new Error(data.message || "Request failed");
     }
 
     return data;
   } catch (error) {
-    console.error('API request failed:', error);
     throw error;
   }
 }

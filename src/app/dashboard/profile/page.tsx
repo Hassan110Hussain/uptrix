@@ -9,7 +9,7 @@ import { useAuth } from "@/context/AuthContext";
 import { authApi } from "@/lib/api";
 import { useToast } from "@/hooks/useToast";
 import { ApiResponse, User as UserType } from "@/types";
-import { validatePassword } from "@/lib/utils";
+import { checkPassword } from "@/lib/utils";
 
 interface ProfileData {
   id: string;
@@ -45,7 +45,7 @@ export default function ProfilePage() {
   function validatePasswordForm(): boolean {
     const errors: Record<string, string> = {};
     if (!passwordForm.oldPassword) errors.oldPassword = "Current password is required";
-    const pwdError = validatePassword(passwordForm.newPassword);
+    const pwdError = checkPassword(passwordForm.newPassword);
     if (!passwordForm.newPassword) errors.newPassword = "New password is required";
     else if (pwdError) errors.newPassword = pwdError;
     if (passwordForm.newPassword !== passwordForm.confirmPassword)

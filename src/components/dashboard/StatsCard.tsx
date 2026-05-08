@@ -1,8 +1,7 @@
-import React from "react";
 import { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-interface StatsCardProps {
+interface StatsProps {
   title: string;
   value: string | number;
   icon: LucideIcon;
@@ -16,7 +15,7 @@ export function StatsCard({
   icon: Icon,
   color = "default",
   description,
-}: StatsCardProps) {
+}: StatsProps) {
   const colorMap = {
     green: {
       iconBg: "bg-[#00c896]/10 border-[#00c896]/20",

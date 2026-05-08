@@ -1,6 +1,6 @@
 "use client";
 
-import React, {
+import {
   createContext,
   useContext,
   useState,
@@ -39,9 +39,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     try {
       const token = localStorage.getItem(TOKEN_KEY);
-      const userRaw = localStorage.getItem(USER_KEY);
-      if (token && userRaw) {
-        const user: User = JSON.parse(userRaw);
+      const userData = localStorage.getItem(USER_KEY);
+      if (token && userData) {
+        const user: User = JSON.parse(userData);
         setState({
           user,
           token,
